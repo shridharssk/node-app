@@ -42,7 +42,7 @@ jobs:
       ResourceGroupLocation: "eastus"
       WEBAPP: wapp-cm-dev-website-c
       GROUP: node-app
-      ACCOUNT: storageuser  # Does not have to exist, this will be created for you
+      ACCOUNT: shridhartempstore  # Does not have to exist, this will be created for you
       CONTAINER: dev-strogae-container
       EXPIRY_TIME: 10 minutes
     steps:
