@@ -2,7 +2,7 @@
  *
  * Educational app to exploit XSS and defend against them using Node.JS
  *
- * October 2019
+ * October 2019.
 */
 
 'use strict';
