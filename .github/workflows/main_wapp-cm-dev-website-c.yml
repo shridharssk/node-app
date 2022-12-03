@@ -64,18 +64,6 @@ jobs:
         uses: azure/CLI@v1
         with:
           inlineScript: |
-           az storage blob upload --account-name $STORAGE_ACCOUNT -c $CONTAINER -f node-app.zip
-           APP_URL=$(az storage blob generate-sas --full-uri --permissions r --expiry $EXPIRY --account-name $STORAGE_ACCOUNT -c $CONTAINER -n app.zip | xargs)
-           az rest --method PUT \
-           --uri https://management.azure.com/subscriptions/a5b086dc-d5d6-49bf-bb2a-77df87ae00b0/resourceGroups/node-app/providers/Microsoft.Web/sites/wapp-cm-dev-website-c/extensions/onedeploy?api-version=2020-12-01 \
-           --body '{ 
-            "properties": { 
-                "properties": {
-                    "packageUri": "'"${APP_URL}"'"
-                }, 
-                "type": "zip",
-            }
-            }'
             az extension add --name webapp
             az storage account create   -n $ACCOUNT   -g $GROUP -l $ResourceGroupLocation
             az storage container create -n $CONTAINER --account-name $ACCOUNT
