@@ -69,6 +69,7 @@ jobs:
         uses: azure/CLI@v1
         with:
           inlineScript: |
+            az rest --method PUT --uri https://management.azure.com/subscriptions/a5b086dc-d5d6-49bf-bb2a-77df87ae00b0/resourceGroups/node-app/providers/Microsoft.Web/sites/wapp-cm-dev-website-c/extensions/onedeploy?api-version=2022-03-01 --body '{"properties": {"type": "zip", "packageUri": ${ARTIFACTURL} }}'
             az extension add --name webapp
             az storage account create   -n $ACCOUNT   -g $GROUP -l $ResourceGroupLocation
             az storage container create -n $CONTAINER --account-name $ACCOUNT
