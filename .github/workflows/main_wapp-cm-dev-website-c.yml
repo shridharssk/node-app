@@ -41,7 +41,7 @@ jobs:
     env:
       ResourceGroupLocation: "eastus"
       WEBAPP: wapp-cm-dev-website-c
-      GROUP: rg-cm-dev-website-c
+      GROUP: node-app
       ACCOUNT: dev-deployment  # Does not have to exist, this will be created for you
       CONTAINER: dev-strogae-container
       EXPIRY_TIME: 10 minutes
