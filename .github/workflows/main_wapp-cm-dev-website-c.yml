@@ -52,11 +52,6 @@ jobs:
         uses: azure/login@v1
         with:
           creds: '${{ secrets.AZURE_CREDENTIALS }}'
-      
-      - name: Download artifact from build job
-        uses: actions/download-artifact@v2
-        with:
-          name: node-app
           
       - name: Set SAS token expiration
         run: echo "expiry=`date -u -d "$EXPIRY_TIME" '+%Y-%m-%dT%H:%MZ'`" >> $GITHUB_ENV
@@ -69,7 +64,18 @@ jobs:
         uses: azure/CLI@v1
         with:
           inlineScript: |
-            az rest --method PUT --uri https://management.azure.com/subscriptions/a5b086dc-d5d6-49bf-bb2a-77df87ae00b0/resourceGroups/node-app/providers/Microsoft.Web/sites/wapp-cm-dev-website-c/extensions/onedeploy?api-version=2022-03-01 --body '{"properties": {"type": "zip", "packageUri": ${ARTIFACTURL} }}'
+           az storage blob upload --account-name $STORAGE_ACCOUNT -c $CONTAINER -f node-app.zip
+           APP_URL=$(az storage blob generate-sas --full-uri --permissions r --expiry $EXPIRY --account-name $STORAGE_ACCOUNT -c $CONTAINER -n app.zip | xargs)
+           az rest --method PUT \
+           --uri https://management.azure.com/subscriptions/${SUBSCRIPTION}/resourceGroups/${RESOURCE_GROUP}/providers/Microsoft.Web/sites/${WEBAPP}/extensions/onedeploy?api-version=2020-12-01 \
+           --body '{ 
+            "properties": { 
+                "properties": {
+                    "packageUri": "'"${APP_URL}"'"
+                }, 
+                "type": "zip",
+            }
+            }'
             az extension add --name webapp
             az storage account create   -n $ACCOUNT   -g $GROUP -l $ResourceGroupLocation
             az storage container create -n $CONTAINER --account-name $ACCOUNT
