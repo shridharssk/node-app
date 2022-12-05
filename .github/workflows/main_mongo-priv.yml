@@ -76,7 +76,7 @@ jobs:
             az extension add --name webapp
             az storage account create   -n $ACCOUNT   -g $GROUP -l $ResourceGroupLocation
             az storage container create -n $CONTAINER --account-name $ACCOUNT
-            az storage blob upload -f  node-app.zip    --account-name $ACCOUNT -c $CONTAINER -n $ACCOUNT
+            az storage blob upload -f  node-app.zip    --account-name $ACCOUNT -c $CONTAINER -n $ACCOUNT --overwrite 
             ZIP_URL=$(az storage blob generate-sas --full-uri --permissions r --expiry ${{ env.expiry }} --account-name $ACCOUNT -c $CONTAINER -n $ACCOUNT | xargs)
             az webapp deploy --name $WEBAPP --resource-group $GROUP --type zip --src-url  $ZIP_URL --async false
             az storage container delete -n $CONTAINER --account-name $ACCOUNT
